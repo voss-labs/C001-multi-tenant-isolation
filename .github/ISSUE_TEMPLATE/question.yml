@@ -1,0 +1,25 @@
+name: Question
+description: Ask about the specification, the rules or the evaluation.
+title: "Question: "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Search the existing questions first. If an answer changes or clarifies a requirement, it is added to the Revisions table at the end of SPECIFICATION.md.
+
+        Do not paste your solution code here. Ask about the rules, not about your implementation.
+  - type: input
+    id: reference
+    attributes:
+      label: Which part
+      description: The document, and the requirement ID or section.
+      placeholder: SPECIFICATION.md, ISO-04
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+    validations:
+      required: true

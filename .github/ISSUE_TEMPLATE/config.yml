@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Specification
+    url: https://github.com/voss-labs/C001-multi-tenant-isolation/blob/main/docs/SPECIFICATION.md
+    about: Most questions are answered here.
+  - name: How to submit
+    url: https://github.com/voss-labs/C001-multi-tenant-isolation/blob/main/docs/SUBMISSION.md
+    about: Repository requirements, tagging and the submission issue.
