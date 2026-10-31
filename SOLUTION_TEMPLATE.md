@@ -2,7 +2,7 @@
 
 C001: Multi-Tenant Data Isolation. Submission by YOUR-NAME ([@YOUR-USERNAME](https://github.com/YOUR-USERNAME)).
 
-Copy this file into your repository as `SOLUTION.md`, replace every prompt in it, and keep the headings: reviewers read them in this order. Write for an engineer who has never seen your code. Short and precise beats long.
+Copy this file into your folder as `submissions/<your-username>/SOLUTION.md`, replace every prompt in it, and keep the headings: reviewers read them in this order. Write for an engineer who has never seen your code. Short and precise beats long.
 
 ---
 
@@ -12,14 +12,7 @@ In three to five sentences: how your system keeps tenants apart, and the one dec
 
 ## 2. Run it
 
-| Step | Command |
-| --- | --- |
-| Start | |
-| Load the fixture (if separate) | |
-| Reset to the fixture | |
-| Run the isolation suite | |
-
-Prerequisites, with versions. Where the API reference lives. How to choose the active tenant on a request.
+`make start`, `make reset`, `make test` and `make stop` are fixed by ENG-02. Say here how long `start` takes, how to choose the active tenant on a request, where the API reference lives, and anything else a reviewer needs before attacking it.
 
 ## 3. Stack
 

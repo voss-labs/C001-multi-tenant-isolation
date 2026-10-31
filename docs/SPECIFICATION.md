@@ -88,12 +88,13 @@ These are what the challenge is judged on. Active tenant means the tenant the cu
 
 | ID | Requirement |
 | --- | --- |
-| ENG-01 | It starts from a clean clone with one documented command on Linux or macOS (Windows through WSL is fine). It needs nothing more than Docker or one language toolchain: no paid services, no cloud accounts, no API keys. |
-| ENG-02 | It loads the standard fixture (section 6) on start, or with one more documented command, and has one documented command that resets the database to exactly the standard fixture. |
-| ENG-03 | The isolation test suite runs with one documented command against a real instance of the database you ship, not a mock or an in-memory stand-in for a different engine. It exits non-zero on any failure. |
+| ENG-01 | Your submission lives entirely in `submissions/<username>/` in this repository, your GitHub username in lowercase, and arrives as one pull request. On the host it needs only `make` and Docker with Compose v2; everything else, including the test runner, runs in containers. No paid services, cloud accounts or API keys. |
+| ENG-02 | Your folder's Makefile has four targets. `start` builds and starts everything in the background, loads the standard fixture (section 6), and returns only once the API accepts requests on `http://localhost:8080`. `reset` puts the database back to exactly the standard fixture. `test` runs the isolation suite against the running system. `stop` stops and removes everything, including volumes. Name your Compose project `c001-<username>`. |
+| ENG-03 | The isolation suite runs against a real instance of the database you ship, not a mock or an in-memory stand-in for a different engine. `make test` exits non-zero on any failure. |
 | ENG-04 | Every scenario in [TEST_MATRIX.md](TEST_MATRIX.md) has at least one automated test, mapped by ID in your SOLUTION.md. |
-| ENG-05 | SOLUTION.md, built from [SOLUTION_TEMPLATE.md](../SOLUTION_TEMPLATE.md), is complete. |
-| ENG-06 | Your repository is public and carries an open-source license. |
+| ENG-05 | Your folder has a complete SOLUTION.md, built from [SOLUTION_TEMPLATE.md](../SOLUTION_TEMPLATE.md), and a README.md saying how to choose the active tenant on a request and where the API reference is. |
+| ENG-06 | The reference machine is the GitHub Actions `ubuntu-latest` runner. Your submission counts as starting only if the Isolation run check on your pull request passes `make start` there. |
+| ENG-07 | The folder holds source, not artifacts: no file over 2 MB, no more than 10 MB in total, no dependency folders, build output, symlinks or submodules. |
 
 ---
 

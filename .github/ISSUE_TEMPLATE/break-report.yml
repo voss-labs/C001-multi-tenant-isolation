@@ -8,22 +8,15 @@ body:
       value: |
         Read the [break round rules](https://github.com/voss-labs/C001-multi-tenant-isolation/blob/main/docs/EVALUATION.md#break-round) first. Reports filed outside the break round are closed as invalid.
 
-        Run the target inside a disposable virtual machine that holds none of your credentials. Attack only the frozen commit, running there. Never attack anything deployed.
+        Run the target inside a disposable virtual machine that holds none of your credentials. Attack only `submissions/<target>/` at the `c001-frozen` tag, running there. Never attack anything deployed.
 
         A report is judged as filed. To correct it, post the correction as a comment; the report then dates from that comment.
   - type: input
     id: target
     attributes:
-      label: Target submission
-      description: The submission issue you attacked.
-      placeholder: "#12"
-    validations:
-      required: true
-  - type: input
-    id: commit
-    attributes:
-      label: Commit SHA tested
-      description: Must match the Frozen comment on the target submission issue.
+      label: Target
+      description: The username whose folder you attacked.
+      placeholder: priya-k
     validations:
       required: true
   - type: dropdown
@@ -50,7 +43,7 @@ body:
     id: reproduction
     attributes:
       label: Reproduction
-      description: Every step from a clean start at the frozen commit with the standard fixture. Exact HTTP requests, as fixture users or users you registered. For ISO-09 or ISO-10 findings only, include the scoping patch or the direct database query with the runtime identity.
+      description: Every step from a clean checkout of `c001-frozen`, starting with `make start` in the target's folder. Exact HTTP requests, as fixture users or users you registered. For ISO-09 or ISO-10 findings only, include the scoping patch or the direct database query with the runtime identity.
     validations:
       required: true
   - type: textarea
@@ -70,9 +63,9 @@ body:
     attributes:
       label: Checklist
       options:
-        - label: I ran the target in a disposable environment holding none of my credentials, and attacked nothing else.
+        - label: I tested the target at the `c001-frozen` tag, in a disposable environment holding none of my credentials, and attacked nothing else.
           required: true
-        - label: I reproduced this from a clean start with the standard fixture.
+        - label: I reproduced this after `make reset`, against the standard fixture.
           required: true
         - label: I did not set tenant context myself, use a database owner or superuser identity, or edit the second layer.
           required: true

@@ -5,4 +5,4 @@ contact_links:
     about: Most questions are answered here.
   - name: How to submit
     url: https://github.com/voss-labs/C001-multi-tenant-isolation/blob/main/docs/SUBMISSION.md
-    about: Repository requirements, tagging and the submission issue.
+    about: Your folder, the Makefile contract and the pull request.

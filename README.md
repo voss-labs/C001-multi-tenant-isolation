@@ -19,7 +19,7 @@ Design and build a multi-tenant SaaS prototype whose tenant boundaries hold unde
 - **An HTTP API for a small project tracker:** organizations (tenants), members with roles, projects and tasks.
 - **Users who belong to more than one organization,** so deciding which tenant a request is acting for is a real problem, not a lookup.
 - **Isolation enforced in two independent layers,** one of which keeps working when your application code gets a query wrong.
-- **A test suite that attacks your own system** through 28 scenarios, run with one command against a real database.
+- **A test suite that attacks your own system** through 28 scenarios, run with `make test` against a real database.
 - **A written design:** your decisions, your threat model, and where it could still fail.
 
 The full requirements are in [SPECIFICATION.md](docs/SPECIFICATION.md). The attacks are in [TEST_MATRIX.md](docs/TEST_MATRIX.md).
@@ -42,11 +42,11 @@ All times IST.
 ## How to take part
 
 1. **Read** [SPECIFICATION.md](docs/SPECIFICATION.md) and [TEST_MATRIX.md](docs/TEST_MATRIX.md). Spend real time on these before you pick a stack.
-2. **Create your own public repository.** Any name, any stack. Do not fork this one. [SUBMISSION.md](docs/SUBMISSION.md) has the commands.
-3. **Build it.** If the spec is unclear, ask with the [Question](https://github.com/voss-labs/C001-multi-tenant-isolation/issues/new?template=question.yml) form.
-4. **Write it up.** Copy [SOLUTION_TEMPLATE.md](SOLUTION_TEMPLATE.md) into your repository as `SOLUTION.md` and fill in every section.
-5. **Submit.** Tag your commit `c001-submission`, then open a [Submission](https://github.com/voss-labs/C001-multi-tenant-isolation/issues/new?template=submission.yml) issue here.
-6. **Get reviewed.** A maintainer attacks your submission and posts the results on your issue.
+2. **Fork this repository and create `submissions/<your-username>/`.** Everything you build lives in that folder. [SUBMISSION.md](docs/SUBMISSION.md) has the commands.
+3. **Build it.** Any stack, in containers, behind four Makefile targets: `start`, `reset`, `test`, `stop`. If the spec is unclear, ask with the [Question](https://github.com/voss-labs/C001-multi-tenant-isolation/issues/new?template=question.yml) form.
+4. **Write it up.** Copy [SOLUTION_TEMPLATE.md](SOLUTION_TEMPLATE.md) into your folder as `SOLUTION.md` and fill in every section.
+5. **Open a pull request early.** Every push is checked on a clean GitHub runner: your folder layout, then `make start` and `make test`. Keep pushing until the deadline.
+6. **Get frozen, merged and reviewed.** At the deadline your pull request is frozen and merged. A maintainer attacks it and posts the review on your pull request.
 7. **Break things.** In the break round, run other submissions in a disposable sandbox, attack them, and file a [Break report](https://github.com/voss-labs/C001-multi-tenant-isolation/issues/new?template=break-report.yml) for each break you find.
 
 ---
@@ -70,7 +70,8 @@ A weakness you find and document specifically yourself costs half as much as one
 ## Rules
 
 - **Individual entries. Open to anyone.**
-- **Any language, framework and database,** as long as it runs locally with free tools and the database, or a process in front of it, can enforce isolation on its own ([ISO-09](docs/SPECIFICATION.md#4-isolation-requirements)).
+- **Any language, framework and database,** as long as it runs in containers with free tools, and the database, or a process in front of it, can enforce isolation on its own ([ISO-09](docs/SPECIFICATION.md#4-isolation-requirements)).
+- **Your folder is merged into this repository** under its MIT license.
 - **AI tools are allowed.** Say which ones you used. You must be able to explain every line you submit, and a maintainer may ask you to.
 - **Run other people's code in a sandbox:** a disposable virtual machine holding none of your credentials. Never run it on the machine with your SSH keys and tokens.
 - **Attack only a frozen commit running in your own sandbox.** Never anything deployed, by anyone.
@@ -84,7 +85,7 @@ A weakness you find and document specifically yourself costs half as much as one
 | [SPECIFICATION.md](docs/SPECIFICATION.md) | Before anything else. The requirements and the standard fixture. |
 | [TEST_MATRIX.md](docs/TEST_MATRIX.md) | Before you design. These are the attacks you must survive. |
 | [EVALUATION.md](docs/EVALUATION.md) | You want to know how points, findings and the break round work. |
-| [SUBMISSION.md](docs/SUBMISSION.md) | You are setting up your repository, or you are ready to submit. |
+| [SUBMISSION.md](docs/SUBMISSION.md) | You are setting up your folder, or opening your pull request. |
 | [SOLUTION_TEMPLATE.md](SOLUTION_TEMPLATE.md) | You are writing up your design. |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | You found a mistake in the challenge itself. |
 

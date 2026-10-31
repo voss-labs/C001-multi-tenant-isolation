@@ -1,0 +1,63 @@
+name: Submission layout
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+    paths: ["submissions/**"]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: layout-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  layout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Fetch the pull request as data, never as code
+        env:
+          PR: ${{ github.event.pull_request.number }}
+        run: git fetch --no-tags origin "+refs/pull/${PR}/head:refs/remotes/pr/head"
+
+      - name: Check the layout
+        id: check
+        env:
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: node scripts/check-layout.mjs > "$RUNNER_TEMP/report.md"
+
+      - name: Report on the pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          report="$RUNNER_TEMP/report.md"
+          cat "$report" >> "$GITHUB_STEP_SUMMARY"
+          gh api -X POST "repos/$REPO/issues/$PR/labels" -f "labels[]=submission" > /dev/null
+          id="$(gh api "repos/$REPO/issues/$PR/comments" --paginate \
+            --jq '.[] | select(.user.login == "github-actions[bot]" and (.body | startswith("<!-- c001-layout -->"))) | .id' | head -n 1)"
+          if [ -n "$id" ]; then
+            gh api -X PATCH "repos/$REPO/issues/comments/$id" -F "body=@$report" > /dev/null
+          else
+            gh api -X POST "repos/$REPO/issues/$PR/comments" -F "body=@$report" > /dev/null
+          fi
+
+      - name: Fail when the layout needs changes
+        if: steps.check.outputs.ok != 'true'
+        run: exit 1

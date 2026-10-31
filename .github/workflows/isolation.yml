@@ -1,0 +1,63 @@
+name: Isolation run
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths: ["submissions/**"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: isolation-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      AUTHOR: ${{ github.event.pull_request.user.login }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Find the submission folder
+        run: |
+          dir="submissions/$(printf '%s' "$AUTHOR" | tr '[:upper:]' '[:lower:]')"
+          if [ ! -f "$dir/Makefile" ]; then
+            echo "::error::No Makefile at $dir. The Submission layout check says what is missing."
+            exit 1
+          fi
+          echo "DIR=$dir" >> "$GITHUB_ENV"
+
+      - name: make start
+        timeout-minutes: 15
+        run: make -C "$DIR" start
+
+      - name: API answers on port 8080
+        run: |
+          status="$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 http://localhost:8080/ || true)"
+          if [ "$status" = "000" ]; then
+            echo "::error::Nothing answered on http://localhost:8080 after make start returned."
+            exit 1
+          fi
+
+      - name: make test
+        timeout-minutes: 15
+        run: make -C "$DIR" test
+
+      - name: make reset
+        timeout-minutes: 5
+        run: make -C "$DIR" reset
+
+      - name: Container logs
+        if: failure() && env.DIR != ''
+        run: |
+          docker ps -a
+          docker ps -aq | xargs -r -n 1 docker logs --tail 200
+
+      - name: make stop
+        if: always() && env.DIR != ''
+        run: make -C "$DIR" stop
